@@ -1,0 +1,73 @@
+#main-container{
+	margin: 150px auto;
+	width: 650px;
+}
+
+table{
+	background-color: white;
+	text-align: left;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+th, td{
+	padding: 15px;
+}
+
+
+
+thead{
+	background-color: #4d2f02;
+	border-bottom: solid 5px #0F362D;
+	color: white;
+}
+
+tr:nth-child(even){
+	background-color: #ddd;
+}
+
+tr:hover td{
+	background-color: #967036;
+	color: white;
+}
+
+
+<!--Buscador-->
+section{
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+form{
+    margin: auto;
+}
+
+form > div {
+	display: flex;
+	background:#fff;
+	padding: 9px 22px 9px 26px;
+	border-radius: 30px;
+	border:2px solid #cad3dc;
+	box-shadow: rgba(255, 255, 255, 0.5) -8px -8px 15px,
+		rgba(0, 0, 0, 0.1) 10px 10px 10px,
+		rgba(255, 255, 255, 0.5) -8px -8px 15px inset,
+		rgba(0, 0, 0, 0.1) 10px 10px 10px inset;
+
+
+}
+form input {
+	border:none;
+	background: transparent;
+	font-weight: bold;
+	padding-left: 10px;
+    background-size: 10px;
+    background-repeat: no-repeat;
+    width: 0px;
+    transition:all 1s;
+	
+}
+form input:focus{
+    outline: none;
+    width: 10px;
+}

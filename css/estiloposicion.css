@@ -1,0 +1,37 @@
+.contenedor{
+    height: 80vh;
+    width: 80vw;
+    border: 5px solid dodgerblue;
+    margin: 0 auto;
+}
+
+.caja{
+    height: 10rem;
+    width: 5rem;
+    margin: 1rem;
+    position: relative;
+}
+
+.caja1{
+    background-color: green;
+}
+
+.caja2{
+    background-color: gold;
+}
+
+.caja3{
+    background-color: dodgerblue;
+}
+
+.caja4{
+    background-color: green;
+}
+
+.caja5{
+    background-color: gold;
+}
+
+.caja7{
+    background-color: dodgerblue;
+}

@@ -1,0 +1,30 @@
+<?php 
+    include("db.php");
+
+
+    
+    if (isset($_POST['registrar'])) 
+    {
+        if (strlen($_POST['nombre']) >= 1 && strlen($_POST['contraseña']) >= 1) 
+        {
+            $nombre = trim($_POST['nombre']);
+            $contraseña = trim($_POST['contraseña']);
+            //$fechareg = date("d/m/y"); //fecha
+            $consulta = "INSERT INTO usuario(nombre, contraseña) VALUES ('$nombre', '$contraseña')";
+            $resultado2 = mysqli_query($conexion,$consulta);
+            if ($resultado2) {
+                ?> 
+                <div class="alert alert-primary" role="alert"> agregado correcto</div>
+                <?php
+            } else {
+                ?> 
+                <div class="alert alert-danger" role="alert">¡Ups ha ocurrido un error!</div>
+                <?php
+            }
+        }   else {
+                ?> 
+                <div class="alert alert-danger" role="alert">¡Por favor complete los campos!</div>
+                <?php
+        }
+    }
+?>
