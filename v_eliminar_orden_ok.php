@@ -1,6 +1,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <?php
     include('db.php');
+    include("inv_descuneto.php");
+    include("inv_aumento.php");
     session_start();
     $id_det_orden = $_GET['id'];
     $filasTomOrd = 0;
@@ -48,79 +50,82 @@
         echo "    eliminar toma de orden luego detalle de orden";
 
         //INICIO DEL DESCUENTO DE INVENTARIO
-        $consprod = "SELECT tmo.nombre_prod_m, tmo.id_producto_m, tmo.cantidad FROM detalle_orden AS deto
-        INNER JOIN toma_orden AS tmo ON tmo.id_det_orden = deto.id_det_orden
-        WHERE deto.id_det_orden = $id_det_orden;";
+        $suma_ingr[0] = [0,'', 0, 0, '', '', ''];
+        $cont_ing = 1;
+
+        $consprod = "SELECT pinv.id_producto_inv, pinv.nombre_prod_inv, tor.cantidad AS orden_cant, pri.cantidad AS inv_cant, uni.simbolo_uni, uni.tipo_uni, prm.nombre_prod_m 
+        FROM producto_ingrediente AS pri 
+        INNER JOIN unidad_medida AS uni ON uni.id_uni_m = pri.id_uni_m 
+        INNER JOIN producto_menu AS prm ON prm.id_producto_m = pri.id_producto 
+        INNER JOIN producto_inventario AS pinv ON pinv.id_producto_inv = pri.id_ingrediente 
+        INNER JOIN toma_orden AS tor ON tor.id_producto_m = prm.id_producto_m 
+        INNER JOIN detalle_orden AS dor ON dor.id_det_orden = tor.id_det_orden 
+        WHERE dor.id_det_orden = $id_det_orden;";
         $resprod = mysqli_query($conexion, $consprod);
-
         while($rowprod=mysqli_fetch_assoc($resprod)){
-            $id_prod = $rowprod['id_producto_m'];
-            $cantidadmultiplicar = $rowprod['cantidad'];
-            
-            $cons_desc = "SELECT pri.cantidad, uni.simbolo_uni, pinv.nombre_prod_inv,pinv.id_producto_inv, uni.tipo_uni,pinv.u_disp_prod_inv,pinv.u_medida_prod_inv 
-            FROM producto_ingrediente AS pri
-            INNER JOIN unidad_medida AS uni ON uni.id_uni_m = pri.id_uni_m
-            INNER JOIN producto_menu AS prm ON prm.id_producto_m = pri.id_producto
-            INNER JOIN producto_inventario AS pinv ON pinv.id_producto_inv = pri.id_ingrediente
-            WHERE prm.id_producto_m = $id_prod;";
+            $bd_id_producto_inv = $rowprod['id_producto_inv'];
+            $bd_nombre_prod_inv = $rowprod['nombre_prod_inv'];
+            $bd_orden_cant = $rowprod['orden_cant'];
+            $bd_inv_cant = $rowprod['inv_cant'];
+            $bd_simbolo_uni = $rowprod['simbolo_uni'];
+            $bd_tipo_uni = $rowprod['tipo_uni'];
 
+            $no_row = 0; //numero de array
+            $salir = 0;
+            foreach($suma_ingr as [$ary_id_producto_inv, $ary_nombre_prod_inv, $ary_orden_cant, $ary_inv_cant, $ary_simbolo_uni, $ary_tipo_uni]){
+                // if($ary_id_producto_inv == 0){}
+                if($bd_id_producto_inv == $ary_id_producto_inv){
+                    //sumatoria
+                    $val_1 = $ary_orden_cant * $ary_inv_cant;
 
-            $resdesc = mysqli_query($conexion, $cons_desc);
-            $cont = 0;//contador para el erreglo que siempre insetre en la fila 0
+                    $val_2 = $bd_orden_cant * $bd_inv_cant;
 
-            while($rowdesc=mysqli_fetch_assoc($resdesc)){
-                $cant_desc = $rowdesc['cantidad'] * $cantidadmultiplicar;  //--------------
-                $simb_desc = $rowdesc['simbolo_uni']; //--------------
-                $id_producto_inv = $rowdesc['id_producto_inv']; //--------------
-                $tipo_uni = $rowdesc['tipo_uni']; //--------------
-                $u_disp_prod_inv = $rowdesc['u_disp_prod_inv']; //--------------
-                $id_u_medida_prod_inv = $rowdesc['u_medida_prod_inv'];
+                    $sumatoria = aumento($bd_id_producto_inv, $val_1, $ary_simbolo_uni, $val_2, $bd_simbolo_uni, $ary_tipo_uni);
 
-                $conUniMed = "SELECT simbolo_uni FROM unidad_medida WHERE id_uni_m = $id_u_medida_prod_inv;";
-                $resUniMed = mysqli_query($conexion, $conUniMed);
-                $rowUniMed =mysqli_fetch_assoc($resUniMed);
-                $sumb_uni = $rowUniMed['simbolo_uni'];  //--------------
-
-                $_SESSION["id_producto_inv"] = $id_producto_inv;
-                $arreglo[$cont]=array(      //arreglo de cantidades a descontar
-                    "unidad"=>$tipo_uni,
-                    "pCant"=>$u_disp_prod_inv,
-                    "pMedida"=>$sumb_uni,
-                    "resCant"=>$cant_desc,
-                    "resMedida"=>$simb_desc
-                );
-
-                $lista = json_encode($arreglo);    //encriptiar a un JSON el arreglo
-                ?>
-
-                <!-- llamar al archivo js de conversion -->
-                <script type="text/javascript" src=".\js\conversorUnidades_sumar.js"></script>
-
-                <!-- ejecutar ka funcion del archivo -->
-                <script type="text/javascript">
-                    var lista = '<?php echo $lista; ?>'; 
-                    var mydata = JSON.parse(lista);
-                    var conv = conv(mydata);
-                    // document.getElementById("conv<?php //echo $input; ?>").value = conv;
-                    showHint(conv);
-                    
-                    function showHint(str) {
-                        var parametros = 
-                        {
-                            "str" : str,
-                            "id_producto_inv" :<?php echo $id_producto_inv; ?>
-                        };
-
-                        $.ajax({
-                            data: parametros,
-                            url: 'v_descuento_update.php',
-                            type: 'POST'
-                        });
+                    if($sumatoria || $sumatoria == 1){
+                        $auentooooo =  $_SESSION['inv_aumento_resultado'];
+                        $suma_ingr[$no_row] = [$bd_id_producto_inv, "$bd_nombre_prod_inv", 1,  $auentooooo, "$ary_simbolo_uni", "$bd_tipo_uni"];
+                        $ary_new = 0;
+                        echo "<br>**********<br>";
+                        echo " resultado sumatoria =>>>>> ".$_SESSION['inv_aumento_resultado'];
+                        echo "<br>**********<br>";
                     }
-                </script>
-<?php 
+                    $ary_new = 0;
+                    $salir = 1;
+                    //echo "funcion = ".$sumatoria." analizando = ".$bd_id_producto_inv. " ";
+                    //$no_row++;
+                }
+                elseif($salir == 0) {
+                    echo "<br> analizando = ".$bd_id_producto_inv." bd_".gettype($bd_id_producto_inv)." ".$ary_id_producto_inv." ary_".gettype($bd_id_producto_inv)." fila_ary = ".$no_row." <br>";
+                    $ary_new = 1;
+                    $no_row++;
+                }
+            }
+
+            if($ary_new == 1){
+                $suma_ingr[$cont_ing] = [$bd_id_producto_inv, "$bd_nombre_prod_inv", $bd_orden_cant, $bd_inv_cant, "$bd_simbolo_uni", "$bd_tipo_uni"];
+                $cont_ing++;
+            }
+            else {
+                // insertar sumarotia
+                echo "duplicado en array";
             }
         }
+
+
+        echo "<br><br>";
+        echo "--------------------------------------------- aaaaaaaaaaaaaaaaaaaaaaa ---------------------------";
+        var_dump($suma_ingr);
+
+        foreach($suma_ingr as [$ary_id_producto_inv, $ary_nombre_prod_inv, $ary_orden_cant, $ary_inv_cant, $ary_simbolo_uni, $ary_tipo_uni]){
+            if($ary_id_producto_inv == 0){}
+            else {
+                aumento_inv($ary_id_producto_inv, $ary_nombre_prod_inv, $ary_orden_cant, $ary_inv_cant, $ary_simbolo_uni, $ary_tipo_uni);
+            }
+        }
+
+
+
         //FIN DEL DESCUENTO DE INVENTARIO
 
 

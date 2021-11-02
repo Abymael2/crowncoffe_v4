@@ -7,6 +7,8 @@
         echo $varsesion;
         die();
     }
+
+    
 ?>
 
 <!DOCTYPE html>
@@ -84,9 +86,18 @@
             </div>
             <div class="col-4 p-1">
                     <?php 
-                        
+                        //estado de caja:
+                        $Consa1 = "SELECT id FROM tbcajaefectivo WHERE estado=1";
+                        $resp1 = mysqli_query($conexion, $Consa1);
+                        $rower1 = mysqli_fetch_assoc($resp1);
+                        $numerr1 = $rower1["id"];
+                        //contador
+                        $Consa = "SELECT COUNT(detalle_orden.estado_orden) AS dt FROM factura INNER JOIN detalle_orden ON detalle_orden.id_det_orden = factura.id_detalle_orden WHERE factura.id_caja = $numerr1 AND detalle_orden.estado_orden = 0";
+                        $resp = mysqli_query($conexion, $Consa);
+                        $rower = mysqli_fetch_assoc($resp);
+                        $numerr = $rower["dt"];
                     ?>
-                <label for="formGroupExampleInput" class="form-label "><h3>Ordenes atendidas:</h3><h2> <p style="text-align: center;"><?php  ?></p></h2></label>
+                <label for="formGroupExampleInput" class="form-label "><h3>Ordenes atendidas:</h3><h2> <p style="text-align: center;"><?php echo $numerr;  ?></p></h2></label>
                
             </div>
             

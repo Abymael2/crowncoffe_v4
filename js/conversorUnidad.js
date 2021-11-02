@@ -36,8 +36,9 @@ function descInv(pCant, pMedida, resCant, resMedida, unidad){
     var resultado = 0;
 
     if(unidad == "masa"){
+        console.log("---------------Resta de masa-------------------------");
         let prod = conversorMasa(pCant, pMedida);
-        console.log("---------------------------------");
+        console.log("--------");
         let resta = conversorMasa(resCant, resMedida);
 
         if(resta > prod){
@@ -57,8 +58,9 @@ function descInv(pCant, pMedida, resCant, resMedida, unidad){
     }
 
     if(unidad == "volumen"){
+        console.log("---------------Resta de Volumen-------------------------");
         let vol_prod = conversorVolumen(pCant, pMedida);
-        console.log("---------------------------------");
+        console.log("------------");
         let vol_resta = conversorVolumen(resCant, resMedida);
 
         if(vol_resta > vol_prod){
@@ -66,7 +68,6 @@ function descInv(pCant, pMedida, resCant, resMedida, unidad){
             console.log(-1);
             return -1;
         }else{
-            console.log("---------------Resta de Volumen-------------------------");
             let resLitro = parseFloat(vol_prod) - parseFloat(vol_resta);
             console.log(vol_prod +" - " + vol_resta);
             console.log(roundToTwo(resLitro));
@@ -78,12 +79,12 @@ function descInv(pCant, pMedida, resCant, resMedida, unidad){
     }
 
     if(unidad == "unidad"){
+        console.log("---------------Resta de unidad-------------------------");
         if(resCant > pCant){
             console.log("No hay suficiente producto en inventario");
             console.log(-1);
             return -1;
         }else{
-            console.log("---------------Resta de unidad-------------------------");
             let resuni = parseInt(pCant) - parseInt(resCant);
             console.log(pCant + " - " + resCant);
             console.log(" = " + resuni);
@@ -153,7 +154,6 @@ function conversorMasa(valor, simbolo){
 
 //convertir valor a unidad original
 function reversaMasa(valor, simbolo){
-    console.log("////////////**************//////////");
     if(simbolo=="lb"){
         console.log("retornando libras");
         lb = valor / 453.592;
@@ -223,7 +223,6 @@ function conversorVolumen(valor, simbolo){
 
 //convertir valor a unidad original
 function reversaVolumen(valor, simbolo){
-    console.log("////////////**************//////////");
     if(simbolo=="gl"){
         console.log("retornando Galon");
         gl = valor / 3.785;

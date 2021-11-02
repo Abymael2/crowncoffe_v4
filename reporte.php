@@ -46,7 +46,7 @@
 
           <!-- menuu-->
 
-          div class="container p-2">
+<div class="container p-2">
   <div class="row row-cols-1 row-cols-md-3 g-4 px-5">
     <div class="col">
       <div class="card  text-center bg-primary fw-bold fs-3">
@@ -55,7 +55,7 @@
             <img src="./img/reporte.png" class="" alt="..." style="height:16vh;">
           </div>
           <div class="card-body text-secondary">
-            <p>Reporte de producto</p>
+            <p>Reporte de cajas</p>
           </div>
         </a>
       </div>

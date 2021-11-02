@@ -35,11 +35,12 @@ function descInv(pCant, pMedida, resCant, resMedida, unidad){
     let resultado = 0;
 
     if(unidad == "masa"){
+        console.log("---------------Suma de Masa-------------------------");
+
         let prod = conversorMasa(pCant, pMedida);
-        console.log("---------------------------------");
+        console.log("------------------");
         let resta = conversorMasa(resCant, resMedida);
 
-        console.log("---------------Suma de Masa-------------------------");
         let resGramos = parseFloat(prod) + parseFloat(resta);
         console.log(prod +" + " + resta);
         console.log(roundToTwo(resGramos));
@@ -50,11 +51,12 @@ function descInv(pCant, pMedida, resCant, resMedida, unidad){
     }
 
     if(unidad == "volumen"){
+        console.log("---------------Suma de Volumen-------------------------");
+
         let vol_prod = conversorVolumen(pCant, pMedida);
-        console.log("---------------------------------");
+        console.log("---------------------");
         let vol_resta = conversorVolumen(resCant, resMedida);
 
-        console.log("---------------Suma de Volumen-------------------------");
         let resLitro = parseFloat(vol_prod) + parseFloat(vol_resta);
         console.log(vol_prod +" + " + vol_resta);
         console.log(roundToTwo(resLitro));

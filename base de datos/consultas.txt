@@ -1,0 +1,22 @@
+reestablecer ingredientes
+UPDATE `producto_inventario` SET u_disp_prod_inv = 1000
+
+productos con todos sus ingredientes
+SELECT prm.nombre_prod_m, tor.cantidad, pinv.nombre_prod_inv, uni.simbolo_uni, pri.cantidad, pinv.id_producto_inv, uni.tipo_uni,pinv.u_disp_prod_inv,pinv.u_medida_prod_inv, uni.nombre_uni
+            FROM producto_ingrediente AS pri
+            INNER JOIN unidad_medida AS uni ON uni.id_uni_m = pri.id_uni_m
+            INNER JOIN producto_menu AS prm ON prm.id_producto_m = pri.id_producto
+            INNER JOIN producto_inventario AS pinv ON pinv.id_producto_inv = pri.id_ingrediente
+            INNER JOIN toma_orden AS tor ON tor.id_producto_m = prm.id_producto_m
+            INNER JOIN detalle_orden AS dor ON dor.id_det_orden = tor.id_det_orden
+            WHERE dor.id_det_orden = 66
+
+
+
+SELECT pinv.id_producto_inv, pinv.nombre_prod_inv, ping.cantidad AS inv_cant, uni.simbolo_uni, uni.tipo_uni,pinv.u_disp_prod_inv, uni2.simbolo_uni, pm.id_producto_m, pm.nombre_prod_m 
+FROM producto_ingrediente AS ping
+INNER JOIN producto_menu AS pm ON ping.id_producto = pm.id_producto_m
+INNER JOIN producto_inventario AS pinv ON ping.id_ingrediente = pinv.id_producto_inv
+INNER JOIN unidad_medida AS uni ON ping.id_uni_m = uni.id_uni_m
+INNER JOIN unidad_medida as uni2 ON pinv.u_medida_prod_inv = uni2.id_uni_m
+where pm.id_producto_m = 33

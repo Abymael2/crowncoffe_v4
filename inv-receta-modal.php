@@ -30,7 +30,7 @@
 
 
 
-    $categoria = "SELECT producto_ingrediente.cantidad, producto_inventario.nombre_prod_inv, unidad_medida.nombre_uni, producto_ingrediente.exclusion FROM producto_ingrediente 
+    $categoria = "SELECT producto_ingrediente.id_pro_ing, producto_ingrediente.cantidad, producto_inventario.nombre_prod_inv, unidad_medida.nombre_uni, producto_ingrediente.exclusion FROM producto_ingrediente 
                     INNER JOIN producto_inventario ON producto_inventario.id_producto_inv = producto_ingrediente.id_ingrediente 
                     INNER JOIN unidad_medida ON unidad_medida.id_uni_m = producto_ingrediente.id_uni_m
                     WHERE id_producto = $idd";
@@ -136,27 +136,20 @@
                     <td><?php echo $row["nombre_uni"] ?></td>
                     <td><?php echo $row["exclusion"] ?></td>
                     <td> 
-                        <a class="btn btn-outline-danger" href="" data-bs-toggle="modal" data-bs-target="#modal_eliminar<?php echo $row["id_producto_m"]; ?>" data-bs-whatever="@mdo">
+                        <a class="btn btn-outline-danger" href="" data-bs-toggle="modal" data-bs-target="#modal_eliminar<?php echo $row["id_pro_ing"]; ?>" data-bs-whatever="@mdo">
                             <img class="d-inline" src="img/trash.svg" alt="">
                         </a> 
                     </td>
                 </tr>
 
                 <?php 
-                    include("inv-alm-producto-eliminar.php");
+                    include("inv-alm-producto-eliminar2.php");
                     }
                 ?>
             </tbody>
             <!--otra tabla-->
         </table>
     </div>
-
-                <center>
-            <button type="button" class="btn btn-danger" style="height: 5vh;"> Cancelar</button>
-            <button type="button" class="btn btn-primary">Guardar</button>
-            </center>
-
-
     <script type="text/javascript" src="js/validarnumero.js"></script>
     <!-- validacion de input solo numeros -->
 
